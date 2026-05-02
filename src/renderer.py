@@ -11,60 +11,60 @@ from pathlib import Path
 from .models import KeychainParams
 from .utils import find_openscad, safe_filename, scad_escape
 
-# SCAD template — variable names stay in Italian because they are part of the
-# OpenSCAD source (Customizer labels), not the Python API.
+# SCAD template variable names are kept in English because they are part of the
+# generated OpenSCAD source, not the Python API.
 _SCAD_TEMPLATE = """\
 use <Chewy-Regular.ttf>
 use <Lobster-Regular.ttf>
 use <Pacifico-Regular.ttf>
 
-nome = "{name}";
-font_utilizzato = "{font}";
+name = "{name}";
+selected_font = "{font}";
 
-colore_unico = "{base_color}";
-colore_testo  = "{text_color}";
+base_color = "{base_color}";
+text_color = "{text_color}";
 
-altezza_testo          = {text_height};
-spessore_base          = {base_thickness};
-spessore_testo         = {text_thickness};
-offset_val             = {offset};
+text_height = {text_height};
+base_thickness = {base_thickness};
+text_thickness = {text_thickness};
+offset_value = {offset};
 
-diametro_esterno_gancio = {ring_outer_dia};
-diametro_interno_gancio = {ring_inner_dia};
-spostamento_x           = {ring_x};
-spostamento_y           = {ring_y};
+ring_outer_diameter = {ring_outer_dia};
+ring_inner_diameter = {ring_inner_dia};
+ring_offset_x = {ring_x};
+ring_offset_y = {ring_y};
 
 module base_shape() {{
     union() {{
-        linear_extrude(height = spessore_base)
-            offset(delta = offset_val)
-                text(nome, size = altezza_testo, font = font_utilizzato,
+        linear_extrude(height = base_thickness)
+            offset(delta = offset_value)
+                text(name, size = text_height, font = selected_font,
                      halign = "left", valign = "baseline");
-        translate([spostamento_x, spostamento_y, 0])
-            cylinder(d = diametro_esterno_gancio, h = spessore_base, $fn = 50);
+        translate([ring_offset_x, ring_offset_y, 0])
+            cylinder(d = ring_outer_diameter, h = base_thickness, $fn = 50);
     }}
 }}
 
 module ring_hole() {{
-    translate([spostamento_x, spostamento_y, -0.1])
-        cylinder(d = diametro_interno_gancio, h = spessore_base + 0.2, $fn = 50);
+    translate([ring_offset_x, ring_offset_y, -0.1])
+        cylinder(d = ring_inner_diameter, h = base_thickness + 0.2, $fn = 50);
 }}
 
 {render_block}
 """
 
 _BLOCK_BASE = """\
-color(colore_unico) difference() {
+color(base_color) difference() {
     base_shape();
     ring_hole();
 }
 """
 
 _BLOCK_TEXT = """\
-translate([0, 0, spessore_base])
-    color(colore_testo)
-        linear_extrude(height = spessore_testo)
-            text(nome, size = altezza_testo, font = font_utilizzato,
+translate([0, 0, base_thickness])
+    color(text_color)
+        linear_extrude(height = text_thickness)
+            text(name, size = text_height, font = selected_font,
                  halign = "left", valign = "baseline");
 """
 

@@ -72,6 +72,30 @@ python -m src.main --name "Laura" --export-3mf --openscad /usr/bin/openscad
 
 On Windows, the path may look like `C:\Program Files\OpenSCAD\openscad.exe`.
 
+## Visual Walkthrough
+
+This is the typical batch workflow, shown in the same order you will use it.
+
+1. Prepare the input list in [names.csv](names.csv).
+
+   ![Editing the input names list](assets/0_names.jpg)
+
+2. Run the generator from the project root.
+
+   ![Generated names list and job output](assets/1_Name_list.jpg)
+
+3. Review the preview images produced for each keychain.
+
+   ![Previewing the generated keychain](assets/2_Name_preview.jpg)
+
+4. Open the exported 3MF in Bambu Studio and verify the color mapping.
+
+   ![Imported model in Bambu Studio](assets/3_Name_bambustidio.jpg)
+
+5. The complete end-to-end flow is summarized in the animation below.
+
+   ![Complete workflow animation](assets/example_workflow.gif)
+
 ---
 
 ## Project Structure
